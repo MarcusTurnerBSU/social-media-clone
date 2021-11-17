@@ -24,19 +24,20 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.post("/api/login", function (req, res) {
-  let loggedIn = false;
-
   // Return the response by calling our function
-  if (req.body.username == "admin" && req.body.password == "password") {
-    loggedIn = true;
-    //login function goes here - check database if details match
-  }
-
-  res.json({
-    loggedIn: loggedIn,
+  // if (req.body.username == "admin" && req.body.password == "password") {
+  //   loggedIn = true;
+  //login function goes here - check database if details match
+  //}
+  users.login(req.body.username, req.body.password, (result) => {
+    if (!result) {
+      result = false;
+    }
+    console.log(result);
+    res.status(200).json({
+      result,
+    });
   });
-
-  //console.log(req.body);
 });
 
 // Tell us where we're running from
