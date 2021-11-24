@@ -11,6 +11,7 @@ database.connect().then((db) => {
   });
 });
 const users = require("./src/users.js");
+const posts = require("./src/posts.js");
 
 // Tell Express to server HTML, JS, CSS etc from the public/ folder
 // See: http://expressjs.com/en/starter/static-files.html
@@ -33,6 +34,15 @@ app.post("/api/login", function (req, res) {
     if (!result) {
       result = false;
     }
+    console.log(result);
+    res.status(200).json({
+      result,
+    });
+  });
+});
+app.post("/api/post", function (req, res) {
+  console.log(req.body);
+  posts.post(req.body.title, req.body.body, (result) => {
     console.log(result);
     res.status(200).json({
       result,
