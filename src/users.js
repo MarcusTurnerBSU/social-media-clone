@@ -24,7 +24,6 @@ module.exports = {
             callback(result);
           }
           console.log(result);
-          callback(result);
         })
         .catch((err) => {
           console.log("users.login failed with error: " + err);

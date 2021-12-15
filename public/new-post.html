@@ -4,8 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create a Post</title>
+    <script src="js/utils.js"></script>
   </head>
   <body>
+    <nav>
+      <ul>
+        <li>
+          <a href="index.html">Home Page</a>
+        </li>
+        <li>
+          <a href="login.html">Log Out</a>
+        </li>
+      </ul>
+    </nav>
     <form>
       <label for="title_post">Title of the post</label>
       <input id="title" text="text" name="title" autofocus />
@@ -17,28 +28,26 @@
     </form>
 
     <script>
-      function callApi(t, b) {
+      function callApi(formData) {
         let url = "api/post";
 
         return fetch("/api/post", {
           headers: {
-            "Content-Type: application/json"
-            "X-API-Token": window.sessionStorage.getItem('token')
+            "Content-Type": "application/json",
+            "X-API-Token": window.sessionStorage.getItem("token"),
           },
           method: "POST",
-          body: utils.formDataToJSON(data)
-      })
+          body: utils.formDataToJSON(formData),
+        });
+      }
 
       let form = document.querySelector("form");
-
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         let formData = new FormData(form);
-        let titlePost = formData.get("title");
-        let bodyPost = formData.get("body");
 
-        callApi(titlePost, bodyPost).then((result) => {
+        callApi(formData).then((result) => {
           console.log(result);
         });
       });
