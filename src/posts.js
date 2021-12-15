@@ -2,7 +2,7 @@ const DB = require("./database.js");
 const UUID = require("uuid");
 
 module.exports = {
-  post(title, body, callback) {
+  createPost(title, body, userId, callback) {
     DB.connect().then((db) => {
       db.run(
         'INSERT INTO posts ("title","body") VALUES (?, ?)',
