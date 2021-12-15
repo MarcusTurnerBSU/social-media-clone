@@ -25,29 +25,43 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.post("/api/login", function (req, res) {
-  // Return the response by calling our function
-  // if (req.body.username == "admin" && req.body.password == "password") {
-  //   loggedIn = true;
-  //login function goes here - check database if details match
-  //}
   users.login(req.body.username, req.body.password, (result) => {
     if (!result) {
       result = false;
     }
     console.log(result);
-    res.status(200).json({
-      result,
-    });
+    res.status(200).json(result);
   });
 });
-app.post("/api/post", function (req, res) {
-  console.log(req.body);
-  posts.post(req.body.title, req.body.body, (result) => {
-    console.log(result);
-    res.status(200).json({
-      result,
-    });
+
+function okResponse(res, code) {
+  res.status(code).send({});
+}
+
+function notAllowed(res) {
+  res.status(401).send({
+    error: "Not authorised",
   });
+}
+app.post("/api/post", function (req, res) {
+  let apiToken = req.get("X-API-Token");
+
+  if (apiToken) {
+    users.findByToken(apiToken, (user) => {
+      if (user) {
+        posts.createPost(req.body.title, req.body.body, user.id, (result) => {
+          okResponse(res, 201);
+          console.log(req.body);
+        });
+      } else {
+        console.log("user not found");
+        notAllowed(res);
+      }
+    });
+  } else {
+    console.log("missing api token");
+    notAllowed(res);
+  }
 });
 
 // Tell us where we're running from
