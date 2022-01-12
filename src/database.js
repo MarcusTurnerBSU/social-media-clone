@@ -1,5 +1,5 @@
 const Sqlite = require("sqlite");
-const Sqlite3 = require("Sqlite3");
+const Sqlite3 = require("sqlite3");
 
 const dbFilename = "./webapps.db";
 

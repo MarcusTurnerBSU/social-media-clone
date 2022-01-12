@@ -23,10 +23,26 @@
     </nav>
     <div id="loggedOutMsg"></div>
 
-    <script>
+    <div id="posts-container">
+      <!-- Posts will show here -->
+    </div>
+
+    <button id="loadMoreButton" onclick="nextPage()">Load more...</button>
+
+    <template id="post-template">
+      <div class="post">
+        <h2></h2>
+        <img />
+        <div class="body"></div>
+      </div>
+    </template>
+
+    <!-- <script>
       let loggedOutMsg = document.getElementById("loggedOutMsg");
 
       //loggedOutMsg.insertAdjacentHTML("beforeend", "<p>Logged Out<p>")
-    </script>
+    </script> -->
   </body>
+
+  
 </html>
