@@ -70,7 +70,6 @@ app.post("/api/post", upload.single("image"), function (req, res) {
             postImage.lastID,
             (result) => {
               okResponse(res, 201);
-              console.log(req.body);
             }
           );
         });
@@ -91,7 +90,7 @@ app.get("/api/posts", (req, res) => {
 
   console.log(offset);
 
-  Posts.getPosts(offset, limit, (result) => {
+  posts.getPosts(offset, limit, (result) => {
     res.json(result);
   });
 });

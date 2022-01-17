@@ -13,27 +13,3 @@ function showPosts(posts) {
     container.appendChild(clone);
   });
 }
-
-let itemsPerPage = 5;
-let currentPage = 0;
-
-function loadPosts() {
-  let offset = itemsPerPage * currentPage;
-
-  fetch("/api/posts?offset=" + offset).then((response) => {
-    //Display the posts in the page
-
-    response.json().then((result) => {
-      console.log(result);
-      // result.forEach(showPosts)
-      showPosts(result);
-    });
-  });
-}
-
-function nextPage() {
-  currentPage++;
-  loadPosts();
-}
-
-loadPosts();
