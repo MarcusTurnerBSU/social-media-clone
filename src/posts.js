@@ -11,7 +11,7 @@ module.exports = {
         userId,
         imageId
       ).then((result) => {
-        console.log(result);
+        // console.log(result);
         callback();
       });
     });

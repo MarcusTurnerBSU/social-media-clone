@@ -73,6 +73,8 @@ app.post("/api/post", upload.single("image"), function (req, res) {
             }
           );
         });
+        console.log(req.body, req.file);
+        // res.send({});
       } else {
         console.log("user not found");
         notAllowed(res);
