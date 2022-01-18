@@ -13,41 +13,41 @@
           <a href="index.html">Home Page</a>
         </li>
         <li>
+          <a href="timeline.html">Timeline</a>
+        </li>
+        <li>
           <a href="login.html">Log Out</a>
         </li>
       </ul>
     </nav>
-    <form>
+    <form id="postsForm" action="" method="post" enctype="multipart/form-data">
       <label for="title_post">Title of the post</label>
       <input id="title" text="text" name="title" autofocus />
       <br />
       <label for="body_post">What is on your mind?</label>
       <input id="body" text="text" name="body" />
-
+      <input type="file" name="image" />
       <input type="submit" value="Submit" />
     </form>
 
     <script>
-      function callApi(formData) {
+      function callApi(form) {
         let url = "api/post";
-
+        console.log(form);
         return fetch("/api/post", {
           headers: {
-            "Content-Type": "application/json",
             "X-API-Token": window.sessionStorage.getItem("token"),
           },
           method: "POST",
-          body: utils.formDataToJSON(formData),
+          body: new FormData(form),
         });
       }
 
-      let form = document.querySelector("form");
+      let form = document.getElementById("postsForm");
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        let formData = new FormData(form);
-
-        callApi(formData).then((result) => {
+        callApi(form).then((result) => {
           console.log(result);
         });
       });

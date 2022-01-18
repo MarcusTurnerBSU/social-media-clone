@@ -13,6 +13,20 @@ database.connect().then((db) => {
 const users = require("./src/users.js");
 const posts = require("./src/posts.js");
 
+const UUID = require("uuid");
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, "./public/uploads");
+  },
+  filename: function (req, file, callback) {
+    callback(null, UUID.v4() + "-" + file.originalname);
+  },
+});
+const upload = multer({
+  storage: storage,
+});
+
 // Tell Express to server HTML, JS, CSS etc from the public/ folder
 // See: http://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
@@ -43,16 +57,24 @@ function notAllowed(res) {
     error: "Not authorised",
   });
 }
-app.post("/api/post", function (req, res) {
+app.post("/api/post", upload.single("image"), function (req, res) {
   let apiToken = req.get("X-API-Token");
-
   if (apiToken) {
     users.findByToken(apiToken, (user) => {
       if (user) {
-        posts.createPost(req.body.title, req.body.body, user.id, (result) => {
-          okResponse(res, 201);
-          console.log(req.body);
+        posts.imageUpload(req.file.filename, (postImage) => {
+          posts.createPost(
+            req.body.title,
+            req.body.body,
+            user.id,
+            postImage.lastID,
+            (result) => {
+              okResponse(res, 201);
+            }
+          );
         });
+        console.log(req.body, req.file);
+        // res.send({});
       } else {
         console.log("user not found");
         notAllowed(res);
@@ -62,6 +84,17 @@ app.post("/api/post", function (req, res) {
     console.log("missing api token");
     notAllowed(res);
   }
+});
+
+app.get("/api/posts", (req, res) => {
+  let limit = 5;
+  let offset = req.query.offset;
+
+  console.log(offset);
+
+  posts.getPosts(offset, limit, (result) => {
+    res.json(result);
+  });
 });
 
 // Tell us where we're running from
